@@ -5,7 +5,6 @@ body {
 /* Sidebar */
 
 .sidebar {
-
     position: fixed;
     left: 0;
     top: 0;
@@ -13,7 +12,6 @@ body {
     width: 200px;
     height: 100vh;
 
-    
     padding: 10px;
 }
 
@@ -23,13 +21,20 @@ body {
     display: block;
 }
 
+.title {
+    margin-bottom: 1em;
+}
+
+nav {
+    padding-top: 1em;
+}
 /* Content */
 
 .content {
 
-    margin-left: 220px;
+    margin-left: 200px;
     padding: 20px;
-    padding-top: 54px;
+    padding-top: calc(10px + 2em);
     max-width: 1200px;
 }
 
