@@ -1,0 +1,166 @@
+body {
+    margin: 0;
+    font-family: Times, "Times New Roman", serif;
+}
+
+/* Sidebar */
+
+.sidebar {
+
+    position: fixed;
+    left: 0;
+    top: 0;
+
+    width: 260px;
+    height: 100vh;
+
+    padding: 20px;
+}
+
+.title {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+nav a {
+
+    display: block;
+    margin-bottom: 10px;
+    text-decoration: none;
+    color: blue;
+
+}
+
+/* Content */
+
+.content {
+
+    margin-left: 260px;
+    padding: 20px;
+
+    max-width: 1200px;
+}
+
+/* Project */
+
+.project {
+
+    margin-bottom: 80px;
+    position: relative;
+}
+
+/* Slideshow */
+
+.slideshow {
+
+    position: relative;
+}
+
+.slide {
+
+    width: 100%;
+    display: none;
+}
+
+.slide.active {
+    display: block;
+}
+
+/* Arrows */
+
+.arrow {
+
+    position: absolute;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    background: none;
+    border: none;
+
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.prev {
+    left: -30px;
+}
+
+.next {
+    right: -30px;
+}
+
+/* Click zones */
+
+.click-left {
+
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    width: 50%;
+    height: 100%;
+
+    cursor: pointer;
+}
+
+.click-right {
+
+    position: absolute;
+    right: 0;
+    top: 0;
+
+    width: 50%;
+    height: 100%;
+
+    cursor: pointer;
+}
+
+/* Description */
+
+.description {
+
+    position: absolute;
+
+    bottom: 10px;
+    left: 10px;
+
+    background: white;
+
+    padding: 10px;
+
+    opacity: 0;
+
+    transition: opacity 0.2s;
+}
+
+.project:hover .description {
+    opacity: 1;
+}
+
+/* Mobile */
+
+@media (max-width: 800px) {
+
+    .sidebar {
+        position: relative;
+        width: auto;
+        height: auto;
+    }
+
+    .content {
+        margin-left: 0;
+    }
+
+    .description {
+
+        position: relative;
+        opacity: 1;
+        margin-top: 10px;
+    }
+
+    .arrow {
+        display: none;
+    }
+
+}
