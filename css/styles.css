@@ -118,22 +118,7 @@ nav a {
 
 .description {
 
-    position: absolute;
-
-    bottom: 10px;
-    left: 10px;
-
-    background: white;
-
-    padding: 10px;
-
-    opacity: 0;
-
-    transition: opacity 0.2s;
-}
-
-.project:hover .description {
-    opacity: 1;
+    margin-top: 20px;
 }
 
 /* Mobile */
