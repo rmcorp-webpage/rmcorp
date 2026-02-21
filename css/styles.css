@@ -13,12 +13,8 @@ body {
     height: 100vh;
 
     padding: 10px;
-}
 
-.logo svg {
-    width: 100px;
-    height: auto;
-    display: block;
+    position: fixed;
 }
 
 .logo {
@@ -27,14 +23,19 @@ body {
     left: 10px;
 }
 
+.logo svg {
+    width: 100px;
+    height: auto;
+    display: block;
+}
+
 nav {
-    margin-top: 60px;
+    margin-top: calc(10px + 58px);
 }
 
 /* Content */
 
 .content {
-
     margin-left: 200px;
     padding: 10px;
     max-width: 1200px;
@@ -43,7 +44,6 @@ nav {
 /* Project */
 
 .project {
-
     margin-bottom: 80px;
     position: relative;
 }
@@ -51,12 +51,10 @@ nav {
 /* Slideshow */
 
 .slideshow {
-
     position: relative;
 }
 
 .slide {
-
     width: 100%;
     display: none;
 }
@@ -74,7 +72,6 @@ nav {
 /* Click zones */
 
 .click-left {
-
     position: absolute;
     left: 0;
     top: 0;
@@ -86,7 +83,6 @@ nav {
 }
 
 .click-right {
-
     position: absolute;
     right: 0;
     top: 0;
@@ -100,7 +96,6 @@ nav {
 /* Description */
 
 .description {
-
     margin-top: 20px;
     display: none;
 }
@@ -115,19 +110,23 @@ nav {
         height: auto;
     }
 
+    .logo {
+        position: relative;
+        top: auto;
+        left: auto;
+    }
+
+    nav {
+        margin-top: 10px;
+    }
+
     .content {
         margin-left: 0;
     }
 
     .description {
-
-        position: relative;
-        opacity: 1;
+        display: block;
         margin-top: 10px;
-    }
-
-    .arrow {
-        display: none;
     }
 
 }
