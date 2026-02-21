@@ -1,3 +1,5 @@
+const sidebarDescription = document.getElementById("sidebar-description");
+
 document.querySelectorAll(".slideshow").forEach(slideshow => {
 
     let slides = slideshow.querySelectorAll(".slide");
@@ -21,12 +23,40 @@ document.querySelectorAll(".slideshow").forEach(slideshow => {
 
     slideshow.querySelector(".click-right").onclick = () => showSlide(index + 1);
 
-    document.addEventListener("keydown", e => {
-
-        if (e.key === "ArrowRight") showSlide(index + 1);
-
-        if (e.key === "ArrowLeft") showSlide(index - 1);
-
+    slideshow.addEventListener("mouseenter", () => {
+        sidebarDescription.style.display = "block";
     });
+
+    slideshow.addEventListener("mouseleave", () => {
+        sidebarDescription.style.display = "none";
+    });
+
+});
+
+document.addEventListener("keydown", e => {
+
+    const activeSlideshow = document.querySelector(".slideshow:hover");
+
+    if (!activeSlideshow) return;
+
+    const slides = activeSlideshow.querySelectorAll(".slide");
+
+    let index = [...slides].findIndex(slide => slide.classList.contains("active"));
+
+    if (e.key === "ArrowRight") {
+
+        slides[index].classList.remove("active");
+
+        slides[(index + 1) % slides.length].classList.add("active");
+
+    }
+
+    if (e.key === "ArrowLeft") {
+
+        slides[index].classList.remove("active");
+
+        slides[(index - 1 + slides.length) % slides.length].classList.add("active");
+
+    }
 
 });
