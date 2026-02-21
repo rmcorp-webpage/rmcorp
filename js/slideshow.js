@@ -21,14 +21,13 @@ document.querySelectorAll(".slideshow").forEach(slideshow => {
     slideshow.querySelector(".click-left").onclick = () => showSlide(index - 1);
     slideshow.querySelector(".click-right").onclick = () => showSlide(index + 1);
 
-    slideshow.onmouseenter = () => {
-        sidebarDescription.textContent = slideshow.dataset.description;
+    slideshow.addEventListener("mouseenter", () => {
         sidebarDescription.style.display = "block";
-    };
+    });
 
-    slideshow.onmouseleave = () => {
+    slideshow.addEventListener("mouseleave", () => {
         sidebarDescription.style.display = "none";
-    };
+    });
 
     updateCounter();
 
