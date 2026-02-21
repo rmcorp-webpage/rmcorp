@@ -17,9 +17,10 @@ body {
     padding: 10px;
 }
 
-.title {
-    font-size: 20px;
-    margin-bottom: 20px;
+.title svg {
+    width: 160px;
+    height: auto;
+    display: block;
 }
 
 /* Content */
