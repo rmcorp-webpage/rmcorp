@@ -1,17 +1,11 @@
-body {
-    margin: 0;
-}
-
 /* Sidebar */
 
 .sidebar {
     position: fixed;
     left: 0;
     top: 0;
-
     width: 200px;
     height: 100vh;
-
     padding: 10px;
 }
 
@@ -21,18 +15,20 @@ body {
     display: block;
 }
 
-/* This creates the spacing between logo and nav */
 .logo {
     margin-bottom: 20px;
 }
 
-/* Content aligned with nav */
-.content {
-    margin-left: 200px;
-    padding: 10px;
+nav {
+    margin-top: 0;
+}
 
-    /* THIS is the key alignment fix */
-    margin-top: 78px;
+.content {
+    position: absolute;
+    left: 200px;
+    top: 10px;
+    padding: 10px;
+    max-width: 1200px;
 }
 
 /* Project */
