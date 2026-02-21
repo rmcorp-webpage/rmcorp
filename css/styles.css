@@ -85,8 +85,8 @@ nav {
     display: none;
 }
 
-.contact {
-    margin-top: 20px;
+.contact-page .description {
+    display: block;
 }
 
 /* Mobile */
