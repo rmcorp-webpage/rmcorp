@@ -89,19 +89,41 @@ nav {
 
 @media (max-width: 800px) {
 
+    /* Sidebar becomes normal top block */
     .sidebar {
         position: relative;
         width: auto;
         height: auto;
+        padding: 10px;
     }
 
+    /* Logo behaves normally */
+    .logo svg {
+        height: 58px;
+        width: auto;
+    }
+
+    .logo {
+        margin-bottom: 20px;
+    }
+
+    /* Content moves below sidebar */
     .content {
+        position: relative;
         margin-left: 0;
         margin-top: 0;
+        padding: 10px;
+        max-width: 100%;
     }
 
+    /* Hide hover descriptions entirely on mobile */
     .description {
-        display: block;
+        display: none !important;
+    }
+
+    /* Make slideshow full width */
+    .slideshow {
+        width: 100%;
     }
 
 }
