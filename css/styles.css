@@ -15,19 +15,22 @@ body {
     padding: 10px;
 }
 
-.title svg {
+.logo svg {
     width: 100px;
     height: auto;
     display: block;
 }
 
-.title {
-    margin-bottom: 1em;
+.logo {
+    position: absolute;
+    top: 10px;
+    left: 10px;
 }
 
 nav {
-    padding-top: 1em;
+    margin-top: 60px;
 }
+
 /* Content */
 
 .content {
