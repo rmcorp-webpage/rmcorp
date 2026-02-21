@@ -89,7 +89,6 @@ nav {
 
 @media (max-width: 800px) {
 
-    /* Sidebar becomes normal top block */
     .sidebar {
         position: relative;
         width: auto;
@@ -97,7 +96,6 @@ nav {
         padding: 10px;
     }
 
-    /* Logo behaves normally */
     .logo svg {
         height: 58px;
         width: auto;
@@ -107,7 +105,6 @@ nav {
         margin-bottom: 20px;
     }
 
-    /* Content moves below sidebar */
     .content {
         position: relative;
         margin-left: 0;
@@ -116,14 +113,21 @@ nav {
         max-width: 100%;
     }
 
-    /* Hide hover descriptions entirely on mobile */
     .description {
         display: none !important;
     }
 
-    /* Make slideshow full width */
     .slideshow {
         width: 100%;
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
     }
-
+    .slide {
+    display: block;
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+    }
+    
 }
