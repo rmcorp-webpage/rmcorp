@@ -33,8 +33,7 @@ nav {
 .content {
 
     margin-left: 200px;
-    padding: 20px;
-    padding-top: calc(10px + 2em);
+    padding: 10px;
     max-width: 1200px;
 }
 
