@@ -13,14 +13,6 @@ body {
     height: 100vh;
 
     padding: 10px;
-
-    position: fixed;
-}
-
-.logo {
-    position: absolute;
-    top: 10px;
-    left: 10px;
 }
 
 .logo svg {
@@ -29,23 +21,24 @@ body {
     display: block;
 }
 
-nav {
-    margin-top: calc(10px + 58px);
+/* This creates the spacing between logo and nav */
+.logo {
+    margin-bottom: 20px;
 }
 
-/* Content */
-
+/* Content aligned with nav */
 .content {
     margin-left: 200px;
     padding: 10px;
-    max-width: 1200px;
+
+    /* THIS is the key alignment fix */
+    margin-top: 78px;
 }
 
 /* Project */
 
 .project {
     margin-bottom: 80px;
-    position: relative;
 }
 
 /* Slideshow */
@@ -75,10 +68,8 @@ nav {
     position: absolute;
     left: 0;
     top: 0;
-
     width: 50%;
     height: 100%;
-
     cursor: w-resize;
 }
 
@@ -86,10 +77,8 @@ nav {
     position: absolute;
     right: 0;
     top: 0;
-
     width: 50%;
     height: 100%;
-
     cursor: e-resize;
 }
 
@@ -110,23 +99,13 @@ nav {
         height: auto;
     }
 
-    .logo {
-        position: relative;
-        top: auto;
-        left: auto;
-    }
-
-    nav {
-        margin-top: 10px;
-    }
-
     .content {
         margin-left: 0;
+        margin-top: 0;
     }
 
     .description {
         display: block;
-        margin-top: 10px;
     }
 
 }
