@@ -85,6 +85,10 @@ nav {
     display: none;
 }
 
+.contact {
+    margin-top: 20px;
+}
+
 /* Mobile */
 
 @media (max-width: 800px) {
