@@ -3,8 +3,13 @@ const sidebarDescription = document.getElementById("sidebar-description");
 document.querySelectorAll(".slideshow").forEach(slideshow => {
 
     let slides = slideshow.querySelectorAll(".slide");
+    let counter = slideshow.querySelector(".slide-counter");
 
     let index = 0;
+
+    function updateCounter() {
+        counter.textContent = (index + 1) + " / " + slides.length;
+    }
 
     function showSlide(i) {
 
@@ -13,23 +18,25 @@ document.querySelectorAll(".slideshow").forEach(slideshow => {
         index = (i + slides.length) % slides.length;
 
         slides[index].classList.add("active");
+
+        updateCounter();
     }
 
     slideshow.querySelector(".next").onclick = () => showSlide(index + 1);
-
     slideshow.querySelector(".prev").onclick = () => showSlide(index - 1);
-
     slideshow.querySelector(".click-left").onclick = () => showSlide(index - 1);
-
     slideshow.querySelector(".click-right").onclick = () => showSlide(index + 1);
 
-    slideshow.addEventListener("mouseenter", () => {
+    slideshow.onmouseenter = () => {
+        sidebarDescription.textContent = slideshow.dataset.description;
         sidebarDescription.style.display = "block";
-    });
+    };
 
-    slideshow.addEventListener("mouseleave", () => {
+    slideshow.onmouseleave = () => {
         sidebarDescription.style.display = "none";
-    });
+    };
+
+    updateCounter();
 
 });
 
