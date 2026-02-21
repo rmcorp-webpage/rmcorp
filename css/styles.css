@@ -59,9 +59,8 @@ body {
 
 .slide-counter {
     position: absolute;
-    bottom: 10px;
+    top: 10px;
     left: 10px;
-    font-size: 14px;
 }
 
 /* Click zones */
