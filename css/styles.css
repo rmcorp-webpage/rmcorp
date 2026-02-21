@@ -62,6 +62,13 @@ nav a {
     display: block;
 }
 
+.slide-counter {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    font-size: 14px;
+}
+
 /* Arrows */
 
 .arrow {
