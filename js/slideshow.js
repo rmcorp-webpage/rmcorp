@@ -1,34 +1,38 @@
-const sidebarDescription = document.getElementById("sidebar-description");
+if (window.innerWidth > 800) {
 
-document.querySelectorAll(".slideshow").forEach(slideshow => {
+    const sidebarDescription = document.getElementById("sidebar-description");
 
-    let slides = slideshow.querySelectorAll(".slide");
-    let counter = slideshow.querySelector(".slide-counter");
+    document.querySelectorAll(".slideshow").forEach(slideshow => {
 
-    let index = 0;
+        let slides = slideshow.querySelectorAll(".slide");
+        let counter = slideshow.querySelector(".slide-counter");
 
-    function updateCounter() {
-        counter.textContent = (index + 1) + " / " + slides.length;
-    }
+        let index = 0;
 
-    function showSlide(i) {
-        slides[index].classList.remove("active");
-        index = (i + slides.length) % slides.length;
-        slides[index].classList.add("active");
+        function updateCounter() {
+            counter.textContent = (index + 1) + " / " + slides.length;
+        }
+
+        function showSlide(i) {
+            slides[index].classList.remove("active");
+            index = (i + slides.length) % slides.length;
+            slides[index].classList.add("active");
+            updateCounter();
+        }
+
+        slideshow.querySelector(".click-left").onclick = () => showSlide(index - 1);
+        slideshow.querySelector(".click-right").onclick = () => showSlide(index + 1);
+
+        slideshow.addEventListener("mouseenter", () => {
+            sidebarDescription.style.display = "block";
+        });
+
+        slideshow.addEventListener("mouseleave", () => {
+            sidebarDescription.style.display = "none";
+        });
+
         updateCounter();
-    }
 
-    slideshow.querySelector(".click-left").onclick = () => showSlide(index - 1);
-    slideshow.querySelector(".click-right").onclick = () => showSlide(index + 1);
-
-    slideshow.addEventListener("mouseenter", () => {
-        sidebarDescription.style.display = "block";
     });
 
-    slideshow.addEventListener("mouseleave", () => {
-        sidebarDescription.style.display = "none";
-    });
-
-    updateCounter();
-
-});
+}
