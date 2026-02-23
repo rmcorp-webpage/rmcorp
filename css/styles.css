@@ -70,8 +70,11 @@ nav {
 }
 
 .paypal-button {
-    position: relative;
-    z-index: 2;
+    cursor: default;
+}
+
+.paypal-button iframe {
+    cursor: default;
 }
 
 /* Description */
