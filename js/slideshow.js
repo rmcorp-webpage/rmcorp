@@ -26,8 +26,7 @@ document.querySelectorAll(".slideshow").forEach(slideshow => {
 
     slideshow.addEventListener("mouseenter", () => {
 
-        sidebarDescription.textContent =
-            slideshow.dataset.description;
+       sidebarDescription.innerHTML = slideshow.dataset.description;
 
         sidebarDescription.style.display = "block";
 
