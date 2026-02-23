@@ -126,14 +126,13 @@
         display: none !important;
     }
 
-    /* Enable swipe scrolling only on mobile */
-
     .slideshow {
         display: flex;
         flex-direction: row;
         overflow-x: auto;
         scroll-snap-type: x mandatory;
         -webkit-overflow-scrolling: touch;
+        position: relative;
     }
 
     .slide {
@@ -145,6 +144,12 @@
     .click-left,
     .click-right {
         display: none;
+    }
+
+    .slide-counter {
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
     }
 
 }
