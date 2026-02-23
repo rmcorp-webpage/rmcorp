@@ -147,9 +147,8 @@
     }
 
     .slide-counter {
-        position: absolute;
-        bottom: 10px;
-        left: 10px;
+        position: relative;
+        margin-top: 5px;
     }
 
 }
