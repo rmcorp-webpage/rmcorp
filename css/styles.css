@@ -25,10 +25,10 @@ nav {
 
 .content {
     position: absolute;
-    left: 200px;
+    left: 210px;
     top: 25px;
     padding: 10px;
-    max-width: 1200px;
+    max-width: 1000px;
 }
 
 /* Project */
