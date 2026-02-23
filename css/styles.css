@@ -77,6 +77,11 @@ nav {
     cursor: e-resize;
 }
 
+.paypal-button,
+.paypal-button * {
+    cursor: default !important;
+}
+
 /* Description */
 
 .description {
