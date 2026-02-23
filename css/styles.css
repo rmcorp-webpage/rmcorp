@@ -59,27 +59,19 @@ nav {
 
 /* Click zones */
 
-.click-left {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 50%;
-    height: 100%;
-    cursor: w-resize;
-}
-
+.click-left,
 .click-right {
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 50%;
-    height: 100%;
-    cursor: e-resize;
+    z-index: 1;
 }
 
-.paypal-button,
-.paypal-button * {
-    cursor: default !important;
+.slide {
+    position: relative;
+    z-index: 0;
+}
+
+.paypal-button {
+    position: relative;
+    z-index: 2;
 }
 
 /* Description */
