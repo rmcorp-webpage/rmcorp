@@ -108,31 +108,15 @@
 
 @media (max-width: 800px) {
 
-    .sidebar {
-        position: relative;
-        width: auto;
-        height: auto;
-        padding: 10px;
-    }
-
-    .content {
-        margin-left: 0;
-        margin-top: 0;
-        padding: 10px;
-        max-width: 100%;
-    }
-
-    .description {
-        display: none !important;
-    }
-
     .slideshow {
+        position: relative;
+    }
+
+    .slides {
         display: flex;
-        flex-direction: row;
         overflow-x: auto;
         scroll-snap-type: x mandatory;
         -webkit-overflow-scrolling: touch;
-        position: relative;
     }
 
     .slide {
@@ -141,14 +125,14 @@
         scroll-snap-align: start;
     }
 
-    .click-left,
-    .click-right {
-        display: none;
-    }
-
     .slide-counter {
         position: relative;
         margin-top: 5px;
+    }
+
+    .click-left,
+    .click-right {
+        display: none;
     }
 
 }
