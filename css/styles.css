@@ -81,11 +81,14 @@
 
 /* PayPal button should not trigger slideshow */
 
-.paypal-button,
-.paypal-button iframe {
-    cursor: default;
+.paypal-button {
+    margin-top: 5px;
     position: relative;
     z-index: 3;
+}
+
+.paypal-button iframe {
+    cursor: default;
 }
 
 /* Description */
