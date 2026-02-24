@@ -1,50 +1,80 @@
-const sidebarDescription =
-    document.getElementById("sidebar-description");
+document.addEventListener("DOMContentLoaded", function () {
 
-document.querySelectorAll(".slideshow").forEach(slideshow => {
+    const sidebarDescription =
+        document.getElementById("sidebar-description");
 
-    const slides = slideshow.querySelectorAll(".slide");
-    const counter = slideshow.querySelector(".slide-counter");
+    document.querySelectorAll(".slideshow").forEach(slideshow => {
 
-    let index = 0;
+        const slidesContainer = slideshow.querySelector(".slides");
+        const slides = slideshow.querySelectorAll(".slide");
+        const counter = slideshow.querySelector(".slide-counter");
 
-    function updateCounter() {
-        if (counter) {
-            counter.textContent =
-                (index + 1) + " / " + slides.length;
+        let index = 0;
+
+        function updateCounter(i) {
+            index = i;
+            if (counter) {
+                counter.textContent =
+                    (index + 1) + " / " + slides.length;
+            }
         }
-    }
 
-    function showSlide(i) {
-        slides[index].classList.remove("active");
-        index = (i + slides.length) % slides.length;
-        slides[index].classList.add("active");
-        updateCounter();
-    }
+        function showSlide(i) {
+            slides[index].classList.remove("active");
+            index = (i + slides.length) % slides.length;
+            slides[index].classList.add("active");
+            updateCounter(index);
+        }
 
-    const left = slideshow.querySelector(".click-left");
-    const right = slideshow.querySelector(".click-right");
+        /* Desktop click zones */
 
-    if (left) left.onclick = () => showSlide(index - 1);
-    if (right) right.onclick = () => showSlide(index + 1);
+        const left = slideshow.querySelector(".click-left");
+        const right = slideshow.querySelector(".click-right");
 
-    if (sidebarDescription) {
+        if (left) left.onclick = () => showSlide(index - 1);
+        if (right) right.onclick = () => showSlide(index + 1);
 
-        slideshow.addEventListener("mouseenter", () => {
+        /* Mobile scroll detection */
 
-    sidebarDescription.innerHTML =
-        slideshow.dataset.description || "";
+        if (slidesContainer) {
 
-    sidebarDescription.style.display = "block";
+            slidesContainer.addEventListener("scroll", () => {
 
-});
+                const slideWidth = slidesContainer.clientWidth;
+                const newIndex =
+                    Math.round(slidesContainer.scrollLeft / slideWidth);
 
-        slideshow.addEventListener("mouseleave", () => {
-            sidebarDescription.style.display = "none";
-        });
+                if (newIndex !== index) {
+                    updateCounter(newIndex);
+                }
 
-    }
+            });
 
-    updateCounter();
+        }
+
+        /* Hover description */
+
+        if (sidebarDescription) {
+
+            slideshow.addEventListener("mouseenter", () => {
+
+                sidebarDescription.innerHTML =
+                    slideshow.dataset.description || "";
+
+                sidebarDescription.style.display = "block";
+
+            });
+
+            slideshow.addEventListener("mouseleave", () => {
+
+                sidebarDescription.style.display = "none";
+
+            });
+
+        }
+
+        updateCounter(0);
+
+    });
 
 });
