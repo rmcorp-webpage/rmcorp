@@ -103,10 +103,7 @@ nav {
     z-index: 3;
 }
 
-.paypal-button iframe,
-.paypal-button input {
-    cursor: default;
-}
+
 
 /* ========================= */
 /* Sidebar description */
