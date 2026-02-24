@@ -1,4 +1,6 @@
+/* ========================= */
 /* Sidebar */
+/* ========================= */
 
 .sidebar {
     position: fixed;
@@ -19,28 +21,42 @@
     margin-bottom: 5px;
 }
 
-/* Content aligned using margin instead of absolute positioning */
+nav {
+    margin-top: 0;
+}
+
+/* ========================= */
+/* Content */
+/* ========================= */
 
 .content {
     margin-left: 200px;
     margin-top: 25px;
     padding: 10px;
-    max-width: 800px;
+    max-width: 1200px;
 }
 
+/* ========================= */
 /* Project */
+/* ========================= */
 
 .project {
     margin-bottom: 80px;
 }
 
-/* Slideshow */
+/* ========================= */
+/* Slideshow (desktop) */
+/* ========================= */
 
 .slideshow {
     position: relative;
+    width: 100%;
 }
 
-/* Slides (desktop behavior) */
+.slides {
+    position: relative;
+    width: 100%;
+}
 
 .slide {
     width: 100%;
@@ -51,14 +67,14 @@
     display: block;
 }
 
-/* Slide counter below image */
+/* counter below image */
 
 .slide-counter {
     position: relative;
     margin-top: 5px;
 }
 
-/* Click zones */
+/* click zones */
 
 .click-left,
 .click-right {
@@ -79,7 +95,7 @@
     cursor: e-resize;
 }
 
-/* PayPal button should not trigger slideshow */
+/* PayPal button */
 
 .paypal-button {
     margin-top: 5px;
@@ -87,11 +103,14 @@
     z-index: 3;
 }
 
-.paypal-button iframe {
+.paypal-button iframe,
+.paypal-button input {
     cursor: default;
 }
 
-/* Description */
+/* ========================= */
+/* Sidebar description */
+/* ========================= */
 
 .description {
     margin-top: 20px;
@@ -103,32 +122,62 @@
 }
 
 /* ========================= */
-/* Mobile Layout */
+/* Mobile layout */
 /* ========================= */
 
 @media (max-width: 800px) {
 
+    .sidebar {
+        position: relative;
+        width: auto;
+        height: auto;
+        padding: 10px;
+    }
+
+    .content {
+        margin-left: 0;
+        margin-top: 0;
+        padding: 10px;
+        max-width: 100%;
+    }
+
+    .description {
+        display: none !important;
+    }
+
+    /* slideshow container stays normal */
+
     .slideshow {
         position: relative;
+        width: 100%;
     }
+
+    /* slides wrapper becomes swipe container */
 
     .slides {
         display: flex;
+        flex-direction: row;
         overflow-x: auto;
         scroll-snap-type: x mandatory;
         -webkit-overflow-scrolling: touch;
+        width: 100%;
     }
 
     .slide {
         display: block;
         flex: 0 0 100%;
         scroll-snap-align: start;
+        width: 100%;
     }
+
+    /* counter stays below image */
 
     .slide-counter {
         position: relative;
         margin-top: 5px;
     }
+
+    /* disable click zones on mobile */
 
     .click-left,
     .click-right {
