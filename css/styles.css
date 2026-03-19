@@ -127,6 +127,12 @@ nav {
 /* Mobile layout */
 /* ========================= */
 
+/* hidden by default (desktop) */
+.mobile-description {
+    display: none;
+    margin-top: 5px;
+}
+
 @media (max-width: 800px) {
 
     .sidebar {
