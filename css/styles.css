@@ -154,7 +154,11 @@ nav {
     .webstore-page .mobile-description {
         display: block;
     }
-
+     
+    .contact-page .description {
+        display: block !important;
+    }
+    
     .sidebar {
         position: relative;
         width: auto;
