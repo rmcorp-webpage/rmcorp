@@ -72,6 +72,11 @@ nav {
 .slide-counter {
     position: relative;
     margin-top: 5px;
+    min-height: 1em;
+}
+
+.slideshow:has(.slides img:only-child) .slide-counter {
+    visibility: hidden;
 }
 
 /* click zones */
