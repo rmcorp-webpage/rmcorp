@@ -44,10 +44,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 if (slidesContainer) {
 
-    /* force slideshow to start at first slide (iOS-safe) */
-    setTimeout(() => {
+    /* force slideshow to start at first slide AFTER load */
+    window.addEventListener("load", () => {
         slidesContainer.scrollLeft = 0;
-    }, 0);
+    });
 
     let scrollTimeout;
 
