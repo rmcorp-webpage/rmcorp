@@ -67,7 +67,9 @@ nav {
     display: block;
 }
 
-/* counter below image */
+/* ========================= */
+/* Counter */
+/* ========================= */
 
 .slide-counter {
     position: relative;
@@ -75,11 +77,15 @@ nav {
     min-height: 1em;
 }
 
+/* hide counter for single-image slideshows */
+
 .slideshow:has(.slides img:only-child) .slide-counter {
     visibility: hidden;
 }
 
-/* click zones */
+/* ========================= */
+/* Click zones */
+/* ========================= */
 
 .click-left,
 .click-right {
@@ -100,15 +106,22 @@ nav {
     cursor: e-resize;
 }
 
-/* PayPal button */
+/* disable click zones for single-image slideshows */
+
+.slideshow:has(.slides img:only-child) .click-left,
+.slideshow:has(.slides img:only-child) .click-right {
+    display: none;
+}
+
+/* ========================= */
+/* PayPal */
+/* ========================= */
 
 .paypal-button {
     margin-top: 5px;
     position: relative;
     z-index: 3;
 }
-
-
 
 /* ========================= */
 /* Sidebar description */
@@ -124,16 +137,23 @@ nav {
 }
 
 /* ========================= */
-/* Mobile layout */
+/* Mobile description (webstore only) */
 /* ========================= */
 
-/* hidden by default (desktop) */
 .mobile-description {
     display: none;
     margin-top: 5px;
 }
 
+/* ========================= */
+/* Mobile layout */
+/* ========================= */
+
 @media (max-width: 800px) {
+
+    .webstore-page .mobile-description {
+        display: block;
+    }
 
     .sidebar {
         position: relative;
@@ -153,14 +173,14 @@ nav {
         display: none !important;
     }
 
-    /* slideshow container stays normal */
+    /* slideshow container */
 
     .slideshow {
         position: relative;
         width: 100%;
     }
 
-    /* slides wrapper becomes swipe container */
+    /* swipe container */
 
     .slides {
         display: flex;
