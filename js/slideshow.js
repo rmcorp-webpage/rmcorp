@@ -4,7 +4,11 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("sidebar-description");
 
     document.querySelectorAll(".slideshow").forEach(slideshow => {
+        const mobileDesc = slideshow.querySelector(".mobile-description");
 
+        if (mobileDesc) {
+    mobileDesc.innerHTML = slideshow.dataset.description || "";
+        }
         const slidesContainer = slideshow.querySelector(".slides");
         const slides = slideshow.querySelectorAll(".slide");
         const counter = slideshow.querySelector(".slide-counter");
