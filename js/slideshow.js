@@ -4,11 +4,13 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("sidebar-description");
 
     document.querySelectorAll(".slideshow").forEach(slideshow => {
+
         const mobileDesc = slideshow.querySelector(".mobile-description");
 
         if (mobileDesc) {
-    mobileDesc.innerHTML = slideshow.dataset.description || "";
+            mobileDesc.innerHTML = slideshow.dataset.description || "";
         }
+
         const slidesContainer = slideshow.querySelector(".slides");
         const slides = slideshow.querySelectorAll(".slide");
         const counter = slideshow.querySelector(".slide-counter");
@@ -38,9 +40,14 @@ document.addEventListener("DOMContentLoaded", function () {
         if (left) left.onclick = () => showSlide(index - 1);
         if (right) right.onclick = () => showSlide(index + 1);
 
-        /* Mobile scroll detection */
+        /* Mobile scroll detection + reset */
 
         if (slidesContainer) {
+
+            /* force slideshow to start at first slide (iOS-safe) */
+            setTimeout(() => {
+                slidesContainer.scrollLeft = 0;
+            }, 0);
 
             slidesContainer.addEventListener("scroll", () => {
 
@@ -76,6 +83,8 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
         }
+
+        /* Initialize counter */
 
         updateCounter(0);
 
