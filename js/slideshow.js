@@ -40,34 +40,32 @@ document.addEventListener("DOMContentLoaded", function () {
         if (left) left.onclick = () => showSlide(index - 1);
         if (right) right.onclick = () => showSlide(index + 1);
 
-/* Mobile scroll detection + reset */
+        /* Mobile scroll detection */
 
-if (slidesContainer) {
+        if (slidesContainer) {
 
-    /* force slideshow to start at first slide AFTER load */
-    window.addEventListener("load", () => {
-        slidesContainer.scrollLeft = 0;
-    });
+            /* force slideshow to start at first slide immediately */
+            slidesContainer.scrollLeft = 0;
 
-    let scrollTimeout;
+            let scrollTimeout;
 
-    slidesContainer.addEventListener("scroll", () => {
+            slidesContainer.addEventListener("scroll", () => {
 
-        clearTimeout(scrollTimeout);
+                clearTimeout(scrollTimeout);
 
-        scrollTimeout = setTimeout(() => {
+                scrollTimeout = setTimeout(() => {
 
-            const slideWidth = slidesContainer.clientWidth;
-            const newIndex =
-                Math.floor((slidesContainer.scrollLeft + slideWidth / 2) / slideWidth);
+                    const slideWidth = slidesContainer.clientWidth;
+                    const newIndex =
+                        Math.floor((slidesContainer.scrollLeft + slideWidth / 2) / slideWidth);
 
-            updateCounter(newIndex);
+                    updateCounter(newIndex);
 
-        }, 50);
+                }, 50);
 
-    });
+            });
 
-}
+        }
 
         /* Hover description */
 
