@@ -23,12 +23,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.querySelectorAll(".slideshow").forEach(slideshow => {
 
-        const mobileDesc = slideshow.querySelector(".mobile-description");
-
-        if (mobileDesc) {
-            mobileDesc.innerHTML = slideshow.dataset.description || "";
-        }
-
         const slidesContainer = slideshow.querySelector(".slides");
         const slides = slideshow.querySelectorAll(".slide");
         const counter = slideshow.querySelector(".slide-counter");
@@ -44,7 +38,12 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         function setActiveSlide(i) {
-            slides.forEach(s => s.classList.remove("active"));
+            slides.forEach(s => {
+                s.classList.remove("active");
+                s.classList.remove("zoomed");
+                s.style.transform = "";
+                s.style.transformOrigin = "";
+            });
             slides[i]?.classList.add("active");
         }
 
@@ -98,38 +97,65 @@ document.addEventListener("DOMContentLoaded", function () {
 
         }
 
-        /* ZOOM FEATURE */
+        /* ZOOM (DESKTOP ONLY, CONTAINED) */
 
         slides.forEach(slide => {
 
-            slide.addEventListener("click", (e) => {
+            let isZoomed = false;
 
-                // Desktop: ignore edge clicks (so arrows still work)
-                if (window.innerWidth > 768) {
+            slide.addEventListener("mousemove", (e) => {
 
-                    const rect = slide.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const width = rect.width;
+                if (window.innerWidth <= 768) return;
 
-                    const edgeThreshold = width * 0.25;
+                const rect = slide.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const width = rect.width;
 
+                const edgeThreshold = width * 0.25;
+
+                if (!isZoomed) {
                     if (x < edgeThreshold || x > width - edgeThreshold) {
-                        return;
+                        slide.style.cursor = "default";
+                    } else {
+                        slide.style.cursor = "zoom-in";
                     }
+                } else {
+                    slide.style.cursor = "zoom-out";
+
+                    const y = e.clientY - rect.top;
+
+                    const percentX = x / width * 100;
+                    const percentY = y / rect.height * 100;
+
+                    slide.style.transformOrigin = `${percentX}% ${percentY}%`;
                 }
 
-                const overlay = document.createElement("div");
-                overlay.className = "zoom-overlay";
+            });
 
-                const img = document.createElement("img");
-                img.src = slide.src;
+            slide.addEventListener("click", (e) => {
 
-                overlay.appendChild(img);
-                document.body.appendChild(overlay);
+                if (window.innerWidth <= 768) return;
 
-                overlay.addEventListener("click", () => {
-                    overlay.remove();
-                });
+                const rect = slide.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const width = rect.width;
+
+                const edgeThreshold = width * 0.25;
+
+                if (x < edgeThreshold || x > width - edgeThreshold) {
+                    return;
+                }
+
+                if (!isZoomed) {
+                    isZoomed = true;
+                    slide.classList.add("zoomed");
+                    slide.style.transform = "scale(2)";
+                } else {
+                    isZoomed = false;
+                    slide.classList.remove("zoomed");
+                    slide.style.transform = "";
+                    slide.style.transformOrigin = "";
+                }
 
             });
 
