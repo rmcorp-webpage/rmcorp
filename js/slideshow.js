@@ -31,7 +31,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const right = slideshow.querySelector(".click-right");
 
         let index = 0;
-        let zoomActive = false;
 
         function updateCounter(i) {
             index = i;
@@ -43,19 +42,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
         function setActiveSlide(i) {
             slides.forEach(s => {
-                s.classList.remove("active");
-                s.style.backgroundImage = "";
-                s.style.backgroundSize = "";
-                s.style.backgroundPosition = "";
+                s.classList.remove("active", "zoomed");
+                s.style.transform = "";
+                s.style.transformOrigin = "";
+                s.style.cursor = "";
             });
+
             slides[i]?.classList.add("active");
-            zoomActive = false;
-            enableArrows();
+
+            // re-enable arrows
+            if (left) left.style.pointerEvents = "auto";
+            if (right) right.style.pointerEvents = "auto";
         }
 
         function showSlide(i) {
-            if (zoomActive) return;
-
             index = (i + slides.length) % slides.length;
             setActiveSlide(index);
             updateCounter(index);
@@ -66,15 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
 
-        function disableArrows() {
-            if (left) left.style.pointerEvents = "none";
-            if (right) right.style.pointerEvents = "none";
-        }
-
-        function enableArrows() {
-            if (left) left.style.pointerEvents = "auto";
-            if (right) right.style.pointerEvents = "auto";
-        }
+        /* arrows */
 
         if (left) left.onclick = () => showSlide(index - 1);
         if (right) right.onclick = () => showSlide(index + 1);
@@ -86,8 +78,6 @@ document.addEventListener("DOMContentLoaded", function () {
             let t;
 
             slidesContainer.addEventListener("scroll", () => {
-
-                if (zoomActive) return;
 
                 clearTimeout(t);
 
@@ -112,23 +102,36 @@ document.addEventListener("DOMContentLoaded", function () {
 
         }
 
-        /* ZOOM (background-based, sharp) */
+        /* ZOOM */
 
         slides.forEach(slide => {
+
+            let zoomed = false;
 
             slide.addEventListener("mousemove", (e) => {
 
                 if (window.innerWidth <= 768) return;
-                if (!zoomActive) return;
 
                 const rect = slide.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
 
-                const percentX = (x / rect.width) * 100;
-                const percentY = (y / rect.height) * 100;
+                const edge = rect.width * 0.25;
 
-                slide.style.backgroundPosition = `${percentX}% ${percentY}%`;
+                if (!zoomed) {
+                    if (slides.length > 1 && (x < edge || x > rect.width - edge)) {
+                        slide.style.cursor = "default";
+                    } else {
+                        slide.style.cursor = "zoom-in";
+                    }
+                } else {
+                    slide.style.cursor = "zoom-out";
+
+                    const px = (x / rect.width) * 100;
+                    const py = (y / rect.height) * 100;
+
+                    slide.style.transformOrigin = `${px}% ${py}%`;
+                }
 
             });
 
@@ -140,38 +143,40 @@ document.addEventListener("DOMContentLoaded", function () {
                 const x = e.clientX - rect.left;
                 const edge = rect.width * 0.25;
 
-                if (!zoomActive && slides.length > 1 && (x < edge || x > rect.width - edge)) {
+                if (!zoomed && slides.length > 1 && (x < edge || x > rect.width - edge)) {
                     return;
                 }
 
-                if (!zoomActive) {
+                if (!zoomed) {
 
-                    zoomActive = true;
-                    disableArrows();
+                    zoomed = true;
+                    slide.classList.add("zoomed");
 
-                    const imgSrc = slide.src;
+                    // disable arrows while zoomed
+                    if (left) left.style.pointerEvents = "none";
+                    if (right) right.style.pointerEvents = "none";
 
                     const naturalWidth = slide.naturalWidth;
-                    const naturalHeight = slide.naturalHeight;
+                    const displayedWidth = slide.getBoundingClientRect().width;
 
-                    slide.style.backgroundImage = `url(${imgSrc})`;
-                    slide.style.backgroundRepeat = "no-repeat";
-                    slide.style.backgroundSize = `${naturalWidth}px ${naturalHeight}px`;
-                    slide.style.cursor = "zoom-out";
+                    let scale = naturalWidth / displayedWidth;
 
-                    slide.style.opacity = "0";
+                    scale = Math.min(scale, 3);
+                    scale = Math.max(scale, 1);
+
+                    slide.style.transform = `scale(${scale})`;
 
                 } else {
 
-                    zoomActive = false;
-                    enableArrows();
+                    zoomed = false;
+                    slide.classList.remove("zoomed");
 
-                    slide.style.backgroundImage = "";
-                    slide.style.backgroundSize = "";
-                    slide.style.backgroundPosition = "";
-                    slide.style.cursor = "";
-                    slide.style.opacity = "";
+                    // re-enable arrows
+                    if (left) left.style.pointerEvents = "auto";
+                    if (right) right.style.pointerEvents = "auto";
 
+                    slide.style.transform = "";
+                    slide.style.transformOrigin = "";
                 }
 
             });
@@ -193,6 +198,8 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
         }
+
+        /* init */
 
         setActiveSlide(0);
         updateCounter(0);
