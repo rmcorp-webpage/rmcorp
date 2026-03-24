@@ -51,6 +51,7 @@ nav {
 .slideshow {
     position: relative;
     width: 100%;
+    margin-bottom: 20px;
 }
 
 .slides {
