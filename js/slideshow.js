@@ -1,214 +1,217 @@
-/* ========================= */
-/* Sidebar */
-/* ========================= */
+document.addEventListener("DOMContentLoaded", function () {
 
-.sidebar {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 200px;
-    height: 100vh;
-    padding: 10px;
-}
+    /* ========================= */
+    /* GLOBAL IMAGE OPTIMIZATION */
+    /* ========================= */
 
-.logo svg {
-    width: 100px;
-    height: auto;
-    display: block;
-}
+    document.querySelectorAll("img").forEach((img, i) => {
+        img.loading = i < 4 ? "eager" : "lazy";
+        img.decoding = "async";
+    });
 
-.logo {
-    margin-bottom: 5px;
-}
+    /* ========================= */
+    /* SHUFFLE (exclude webstore) */
+    /* ========================= */
 
-nav {
-    margin-top: 0;
-}
+    if (!window.location.pathname.includes("webstore.html")) {
 
-/* ========================= */
-/* Content */
-/* ========================= */
+        const project = document.querySelector(".project");
 
-.content {
-    margin-left: 200px;
-    margin-top: 25px;
-    padding: 10px;
-    max-width: 800px;
-}
+        if (project) {
+            const slideshows = Array.from(project.querySelectorAll(".slideshow"));
 
-/* ========================= */
-/* Project */
-/* ========================= */
+            for (let i = slideshows.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [slideshows[i], slideshows[j]] = [slideshows[j], slideshows[i]];
+            }
 
-.project {
-    margin-bottom: 80px;
-}
-
-/* ========================= */
-/* Slideshow */
-/* ========================= */
-
-.slideshow {
-    position: relative;
-    width: 100%;
-    margin-bottom: 20px;
-}
-
-.slides {
-    position: relative;
-    width: 100%;
-    overflow: hidden;
-}
-
-.slide {
-    width: 100%;
-    display: none;
-    position: relative;
-    overflow: hidden;
-
-    transform-origin: center;
-    transition: transform 0.2s ease;
-    will-change: transform;
-
-    background-color: transparent;
-
-    /* rendering quality fixes */
-    image-rendering: auto;
-    backface-visibility: hidden;
-    transform: translateZ(0);
-}
-
-.slide.active {
-    display: block;
-}
-
-.slide.zoomed {
-    z-index: 2;
-    cursor: zoom-out !important;
-}
-
-/* ========================= */
-/* Counter */
-/* ========================= */
-
-.slide-counter {
-    position: relative;
-    margin-top: 5px;
-    min-height: 1em;
-}
-
-.slideshow:has(.slides img:only-child) .slide-counter {
-    visibility: hidden;
-}
-
-/* ========================= */
-/* Click zones */
-/* ========================= */
-
-.click-left,
-.click-right {
-    position: absolute;
-    top: 0;
-    width: 25%;
-    height: 100%;
-    z-index: 3;
-}
-
-.click-left {
-    left: 0;
-    cursor: w-resize;
-}
-
-.click-right {
-    right: 0;
-    cursor: e-resize;
-}
-
-.slideshow:has(.slides img:only-child) .click-left,
-.slideshow:has(.slides img:only-child) .click-right {
-    display: none;
-}
-
-/* ========================= */
-/* PayPal */
-/* ========================= */
-
-.paypal-button {
-    margin-top: 5px;
-    position: relative;
-    z-index: 3;
-}
-
-/* ========================= */
-/* Sidebar description */
-/* ========================= */
-
-.description {
-    margin-top: 20px;
-    display: none;
-}
-
-.contact-page .description {
-    display: block;
-}
-
-/* ========================= */
-/* Mobile description */
-/* ========================= */
-
-.mobile-description {
-    display: none;
-    margin-top: 10px;
-}
-
-/* ========================= */
-/* Mobile layout */
-/* ========================= */
-
-@media (max-width: 800px) {
-
-    .webstore-page .mobile-description {
-        display: block;
-    }
-     
-    .contact-page .description {
-        display: block !important;
-    }
-    
-    .sidebar {
-        position: relative;
-        width: auto;
-        height: auto;
+            slideshows.forEach(slideshow => project.appendChild(slideshow));
+        }
     }
 
-    .content {
-        margin-left: 0;
-        margin-top: 0;
-        max-width: 100%;
-    }
+    const sidebarDescription =
+        document.getElementById("sidebar-description");
 
-    .description {
-        display: none !important;
-    }
+    document.querySelectorAll(".slideshow").forEach(slideshow => {
 
-    .slides {
-        display: flex;
-        overflow-x: auto;
-        overflow-y: hidden;
-        scroll-snap-type: x mandatory;
-    }
+        const slidesContainer = slideshow.querySelector(".slides");
+        const slides = slideshow.querySelectorAll(".slide");
+        const counter = slideshow.querySelector(".slide-counter");
 
-    .slide {
-        display: block;
-        flex: 0 0 100%;
-        scroll-snap-align: start;
+        const left = slideshow.querySelector(".click-left");
+        const right = slideshow.querySelector(".click-right");
 
-        transform: none !important; /* disables zoom on mobile */
-    }
+        let index = 0;
 
-    .click-left,
-    .click-right {
-        display: none;
-    }
+        function updateCounter(i) {
+            index = i;
+            if (counter) {
+                counter.textContent =
+                    (index + 1) + " / " + slides.length;
+            }
+        }
 
-}
+        function setActiveSlide(i) {
+            slides.forEach(s => {
+                s.classList.remove("active", "zoomed");
+                s.style.transform = "";
+                s.style.transformOrigin = "";
+                s.style.cursor = "";
+            });
+
+            slides[i]?.classList.add("active");
+
+            if (left) left.style.pointerEvents = "auto";
+            if (right) right.style.pointerEvents = "auto";
+        }
+
+        function showSlide(i) {
+            index = (i + slides.length) % slides.length;
+            setActiveSlide(index);
+            updateCounter(index);
+
+            if (slidesContainer) {
+                const w = slides[0].getBoundingClientRect().width;
+                slidesContainer.scrollLeft = index * w;
+            }
+        }
+
+        /* arrows */
+
+        if (left) left.onclick = () => showSlide(index - 1);
+        if (right) right.onclick = () => showSlide(index + 1);
+
+        /* scroll sync */
+
+        if (slidesContainer) {
+
+            let t;
+
+            slidesContainer.addEventListener("scroll", () => {
+
+                clearTimeout(t);
+
+                t = setTimeout(() => {
+
+                    const w = slides[0].getBoundingClientRect().width;
+                    const newIndex =
+                        Math.round(slidesContainer.scrollLeft / w);
+
+                    setActiveSlide(newIndex);
+                    updateCounter(newIndex);
+
+                }, 50);
+
+            });
+
+            window.addEventListener("load", () => {
+                slidesContainer.scrollLeft = 0;
+                setActiveSlide(0);
+                updateCounter(0);
+            });
+
+        }
+
+        /* ZOOM */
+
+        slides.forEach(slide => {
+
+            let zoomed = false;
+
+            slide.addEventListener("mousemove", (e) => {
+
+                if (window.innerWidth <= 768) return;
+
+                const rect = slide.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                const edge = rect.width * 0.25;
+
+                if (!zoomed) {
+                    if (slides.length > 1 && (x < edge || x > rect.width - edge)) {
+                        slide.style.cursor = "default";
+                    } else {
+                        slide.style.cursor = "zoom-in";
+                    }
+                } else {
+                    slide.style.cursor = "zoom-out";
+
+                    const px = (x / rect.width) * 100;
+                    const py = (y / rect.height) * 100;
+
+                    slide.style.transformOrigin = `${px}% ${py}%`;
+                }
+
+            });
+
+            slide.addEventListener("click", (e) => {
+
+                if (window.innerWidth <= 768) return;
+
+                const rect = slide.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const edge = rect.width * 0.25;
+
+                if (!zoomed && slides.length > 1 && (x < edge || x > rect.width - edge)) {
+                    return;
+                }
+
+                if (!zoomed) {
+
+                    zoomed = true;
+                    slide.classList.add("zoomed");
+
+                    if (left) left.style.pointerEvents = "none";
+                    if (right) right.style.pointerEvents = "none";
+
+                    const naturalWidth = slide.naturalWidth;
+                    const displayedWidth = slide.getBoundingClientRect().width;
+
+                    let scale = naturalWidth / displayedWidth;
+
+                    scale = Math.min(scale, 3);
+                    scale = Math.max(scale, 1);
+
+                    slide.style.transform = `scale(${scale})`;
+
+                } else {
+
+                    zoomed = false;
+                    slide.classList.remove("zoomed");
+
+                    if (left) left.style.pointerEvents = "auto";
+                    if (right) right.style.pointerEvents = "auto";
+
+                    slide.style.transform = "";
+                    slide.style.transformOrigin = "";
+                }
+
+            });
+
+        });
+
+        /* hover description */
+
+        if (sidebarDescription) {
+
+            slideshow.addEventListener("mouseenter", () => {
+                sidebarDescription.innerHTML =
+                    slideshow.dataset.description || "";
+                sidebarDescription.style.display = "block";
+            });
+
+            slideshow.addEventListener("mouseleave", () => {
+                sidebarDescription.style.display = "none";
+            });
+
+        }
+
+        /* init */
+
+        setActiveSlide(0);
+        updateCounter(0);
+
+    });
+
+});
