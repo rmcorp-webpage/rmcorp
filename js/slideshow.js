@@ -25,11 +25,21 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
 
+        function setActiveSlide(i) {
+            slides.forEach(s => s.classList.remove("active"));
+            slides[i]?.classList.add("active");
+        }
+
         function showSlide(i) {
-            slides[index].classList.remove("active");
             index = (i + slides.length) % slides.length;
-            slides[index].classList.add("active");
+            setActiveSlide(index);
             updateCounter(index);
+
+            // also move scroll position for consistency
+            if (slidesContainer) {
+                const slideWidth = slides[0].getBoundingClientRect().width;
+                slidesContainer.scrollLeft = index * slideWidth;
+            }
         }
 
         /* Desktop click zones */
@@ -44,9 +54,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (slidesContainer) {
 
-            /* force slideshow to start at first slide immediately */
-            slidesContainer.scrollLeft = 0;
-
             let scrollTimeout;
 
             slidesContainer.addEventListener("scroll", () => {
@@ -55,14 +62,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 scrollTimeout = setTimeout(() => {
 
-                    const slideWidth = slidesContainer.clientWidth;
+                    const slideWidth = slides[0].getBoundingClientRect().width;
                     const newIndex =
-                        Math.floor((slidesContainer.scrollLeft + slideWidth / 2) / slideWidth);
+                        Math.round(slidesContainer.scrollLeft / slideWidth);
 
+                    setActiveSlide(newIndex);
                     updateCounter(newIndex);
 
                 }, 50);
 
+            });
+
+            /* IMPORTANT: wait for full layout before forcing first slide */
+            window.addEventListener("load", () => {
+                const slideWidth = slides[0].getBoundingClientRect().width;
+                slidesContainer.scrollLeft = 0;
+                setActiveSlide(0);
+                updateCounter(0);
             });
 
         }
@@ -88,8 +104,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         }
 
-        /* Initialize counter */
+        /* Initialize */
 
+        setActiveSlide(0);
         updateCounter(0);
 
     });
