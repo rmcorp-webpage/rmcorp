@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         }
 
-        /* ZOOM */
+        /* ZOOM (resolution-aware) */
 
         slides.forEach(slide => {
 
@@ -144,7 +144,20 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (!zoomed) {
                     zoomed = true;
                     slide.classList.add("zoomed");
-                    slide.style.transform = "scale(2)";
+
+                    const naturalWidth = slide.naturalWidth;
+                    const displayedWidth = slide.getBoundingClientRect().width;
+
+                    let scale = naturalWidth / displayedWidth;
+
+                    // clamp to avoid excessive zoom if image is huge
+                    scale = Math.min(scale, 3);
+
+                    // optional minimum so it still feels responsive
+                    scale = Math.max(scale, 1);
+
+                    slide.style.transform = `scale(${scale})`;
+
                 } else {
                     zoomed = false;
                     slide.classList.remove("zoomed");
