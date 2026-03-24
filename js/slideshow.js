@@ -126,40 +126,94 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
         }
+/* ROBUST ZOOM (works with BOTH structures) */
 
-        /* ========================= */
-        /* TRUE SHARP ZOOM */
-        /* ========================= */
+slides.forEach(slide => {
 
-        slides.forEach(slide => {
+    const img = slide.tagName === "IMG" ? slide : slide.querySelector("img");
+    if (!img) return;
 
-            const img = slide.querySelector("img");
-            let zoomed = false;
+    let zoomed = false;
 
-            slide.addEventListener("mousemove", (e) => {
+    slide.addEventListener("mousemove", (e) => {
 
-                if (window.innerWidth <= 768) return;
+        if (window.innerWidth <= 768) return;
 
-                const rect = slide.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const edge = rect.width * 0.25;
+        const rect = slide.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const edge = rect.width * 0.25;
 
-                if (!zoomed) {
-                    if (slides.length > 1 && (x < edge || x > rect.width - edge)) {
-                        slide.style.cursor = "default";
-                    } else {
-                        slide.style.cursor = "zoom-in";
-                    }
-                } else {
-                    slide.style.cursor = "zoom-out";
+        if (!zoomed) {
+            if (slides.length > 1 && (x < edge || x > rect.width - edge)) {
+                slide.style.cursor = "default";
+            } else {
+                slide.style.cursor = "zoom-in";
+            }
+        } else {
+            slide.style.cursor = "zoom-out";
 
-                    const y = e.clientY - rect.top;
+            const y = e.clientY - rect.top;
 
-                    const percentX = (x / rect.width) * 100;
-                    const percentY = (y / rect.height) * 100;
+            const percentX = (x / rect.width) * 100;
+            const percentY = (y / rect.height) * 100;
 
-                    slide.style.backgroundPosition = `${percentX}% ${percentY}%`;
-                }
+            slide.style.backgroundPosition = `${percentX}% ${percentY}%`;
+        }
+
+    });
+
+    slide.addEventListener("click", (e) => {
+
+        if (window.innerWidth <= 768) return;
+
+        const rect = slide.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const edge = rect.width * 0.25;
+
+        if (!zoomed && slides.length > 1 && (x < edge || x > rect.width - edge)) {
+            return;
+        }
+
+        if (!zoomed) {
+
+            zoomed = true;
+            slide.classList.add("zoomed");
+
+            if (left) left.style.pointerEvents = "none";
+            if (right) right.style.pointerEvents = "none";
+
+            const naturalWidth = img.naturalWidth;
+            const naturalHeight = img.naturalHeight;
+
+            slide.style.backgroundImage = `url(${img.src})`;
+            slide.style.backgroundSize = `${naturalWidth}px ${naturalHeight}px`;
+
+            // hide img if wrapped structure
+            if (slide !== img) {
+                img.style.opacity = "0";
+            }
+
+        } else {
+
+            zoomed = false;
+            slide.classList.remove("zoomed");
+
+            if (left) left.style.pointerEvents = "auto";
+            if (right) right.style.pointerEvents = "auto";
+
+            slide.style.backgroundImage = "";
+            slide.style.backgroundSize = "";
+            slide.style.backgroundPosition = "";
+
+            if (slide !== img) {
+                img.style.opacity = "";
+            }
+
+        }
+
+    });
+
+});
 
             });
 
