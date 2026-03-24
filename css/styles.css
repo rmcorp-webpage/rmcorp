@@ -68,6 +68,7 @@ nav {
     transform-origin: center;
     transition: transform 0.2s ease;
     will-change: transform;
+    background-color: transparent;
 }
 
 .slide.active {
