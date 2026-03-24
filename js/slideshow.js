@@ -27,7 +27,11 @@ document.addEventListener("DOMContentLoaded", function () {
         const slides = slideshow.querySelectorAll(".slide");
         const counter = slideshow.querySelector(".slide-counter");
 
+        const left = slideshow.querySelector(".click-left");
+        const right = slideshow.querySelector(".click-right");
+
         let index = 0;
+        let zoomActive = false;
 
         function updateCounter(i) {
             index = i;
@@ -39,14 +43,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
         function setActiveSlide(i) {
             slides.forEach(s => {
-                s.classList.remove("active", "zoomed");
-                s.style.transform = "";
-                s.style.transformOrigin = "";
+                s.classList.remove("active");
+                s.style.backgroundImage = "";
+                s.style.backgroundSize = "";
+                s.style.backgroundPosition = "";
             });
             slides[i]?.classList.add("active");
+            zoomActive = false;
+            enableArrows();
         }
 
         function showSlide(i) {
+            if (zoomActive) return;
+
             index = (i + slides.length) % slides.length;
             setActiveSlide(index);
             updateCounter(index);
@@ -57,10 +66,15 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
 
-        /* arrows */
+        function disableArrows() {
+            if (left) left.style.pointerEvents = "none";
+            if (right) right.style.pointerEvents = "none";
+        }
 
-        const left = slideshow.querySelector(".click-left");
-        const right = slideshow.querySelector(".click-right");
+        function enableArrows() {
+            if (left) left.style.pointerEvents = "auto";
+            if (right) right.style.pointerEvents = "auto";
+        }
 
         if (left) left.onclick = () => showSlide(index - 1);
         if (right) right.onclick = () => showSlide(index + 1);
@@ -72,6 +86,8 @@ document.addEventListener("DOMContentLoaded", function () {
             let t;
 
             slidesContainer.addEventListener("scroll", () => {
+
+                if (zoomActive) return;
 
                 clearTimeout(t);
 
@@ -96,36 +112,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
         }
 
-        /* ZOOM (resolution-aware) */
+        /* ZOOM (background-based, sharp) */
 
         slides.forEach(slide => {
-
-            let zoomed = false;
 
             slide.addEventListener("mousemove", (e) => {
 
                 if (window.innerWidth <= 768) return;
+                if (!zoomActive) return;
 
                 const rect = slide.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
 
-                const edge = rect.width * 0.25;
+                const percentX = (x / rect.width) * 100;
+                const percentY = (y / rect.height) * 100;
 
-                if (!zoomed) {
-                    if (slides.length > 1 && (x < edge || x > rect.width - edge)) {
-                        slide.style.cursor = "default";
-                    } else {
-                        slide.style.cursor = "zoom-in";
-                    }
-                } else {
-                    slide.style.cursor = "zoom-out";
-
-                    const px = (x / rect.width) * 100;
-                    const py = (y / rect.height) * 100;
-
-                    slide.style.transformOrigin = `${px}% ${py}%`;
-                }
+                slide.style.backgroundPosition = `${percentX}% ${percentY}%`;
 
             });
 
@@ -137,32 +140,38 @@ document.addEventListener("DOMContentLoaded", function () {
                 const x = e.clientX - rect.left;
                 const edge = rect.width * 0.25;
 
-                if (slides.length > 1 && (x < edge || x > rect.width - edge)) {
+                if (!zoomActive && slides.length > 1 && (x < edge || x > rect.width - edge)) {
                     return;
                 }
 
-                if (!zoomed) {
-                    zoomed = true;
-                    slide.classList.add("zoomed");
+                if (!zoomActive) {
+
+                    zoomActive = true;
+                    disableArrows();
+
+                    const imgSrc = slide.src;
 
                     const naturalWidth = slide.naturalWidth;
-                    const displayedWidth = slide.getBoundingClientRect().width;
+                    const naturalHeight = slide.naturalHeight;
 
-                    let scale = naturalWidth / displayedWidth;
+                    slide.style.backgroundImage = `url(${imgSrc})`;
+                    slide.style.backgroundRepeat = "no-repeat";
+                    slide.style.backgroundSize = `${naturalWidth}px ${naturalHeight}px`;
+                    slide.style.cursor = "zoom-out";
 
-                    // clamp to avoid excessive zoom if image is huge
-                    scale = Math.min(scale, 3);
-
-                    // optional minimum so it still feels responsive
-                    scale = Math.max(scale, 1);
-
-                    slide.style.transform = `scale(${scale})`;
+                    slide.style.opacity = "0";
 
                 } else {
-                    zoomed = false;
-                    slide.classList.remove("zoomed");
-                    slide.style.transform = "";
-                    slide.style.transformOrigin = "";
+
+                    zoomActive = false;
+                    enableArrows();
+
+                    slide.style.backgroundImage = "";
+                    slide.style.backgroundSize = "";
+                    slide.style.backgroundPosition = "";
+                    slide.style.cursor = "";
+                    slide.style.opacity = "";
+
                 }
 
             });
@@ -184,8 +193,6 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
         }
-
-        /* init */
 
         setActiveSlide(0);
         updateCounter(0);
