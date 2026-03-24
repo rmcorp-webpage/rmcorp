@@ -39,8 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         function setActiveSlide(i) {
             slides.forEach(s => {
-                s.classList.remove("active");
-                s.classList.remove("zoomed");
+                s.classList.remove("active", "zoomed");
                 s.style.transform = "";
                 s.style.transformOrigin = "";
             });
@@ -53,12 +52,12 @@ document.addEventListener("DOMContentLoaded", function () {
             updateCounter(index);
 
             if (slidesContainer) {
-                const slideWidth = slides[0].getBoundingClientRect().width;
-                slidesContainer.scrollLeft = index * slideWidth;
+                const w = slides[0].getBoundingClientRect().width;
+                slidesContainer.scrollLeft = index * w;
             }
         }
 
-        /* Desktop click zones */
+        /* arrows */
 
         const left = slideshow.querySelector(".click-left");
         const right = slideshow.querySelector(".click-right");
@@ -66,21 +65,21 @@ document.addEventListener("DOMContentLoaded", function () {
         if (left) left.onclick = () => showSlide(index - 1);
         if (right) right.onclick = () => showSlide(index + 1);
 
-        /* Mobile scroll detection */
+        /* scroll sync */
 
         if (slidesContainer) {
 
-            let scrollTimeout;
+            let t;
 
             slidesContainer.addEventListener("scroll", () => {
 
-                clearTimeout(scrollTimeout);
+                clearTimeout(t);
 
-                scrollTimeout = setTimeout(() => {
+                t = setTimeout(() => {
 
-                    const slideWidth = slides[0].getBoundingClientRect().width;
+                    const w = slides[0].getBoundingClientRect().width;
                     const newIndex =
-                        Math.round(slidesContainer.scrollLeft / slideWidth);
+                        Math.round(slidesContainer.scrollLeft / w);
 
                     setActiveSlide(newIndex);
                     updateCounter(newIndex);
@@ -97,11 +96,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
         }
 
-        /* ZOOM (DESKTOP ONLY, CONTAINED) */
+        /* ZOOM */
 
         slides.forEach(slide => {
 
-            let isZoomed = false;
+            let zoomed = false;
 
             slide.addEventListener("mousemove", (e) => {
 
@@ -109,12 +108,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 const rect = slide.getBoundingClientRect();
                 const x = e.clientX - rect.left;
-                const width = rect.width;
+                const y = e.clientY - rect.top;
 
-                const edgeThreshold = width * 0.25;
+                const edge = rect.width * 0.25;
 
-                if (!isZoomed) {
-                    if (x < edgeThreshold || x > width - edgeThreshold) {
+                if (!zoomed) {
+                    if (slides.length > 1 && (x < edge || x > rect.width - edge)) {
                         slide.style.cursor = "default";
                     } else {
                         slide.style.cursor = "zoom-in";
@@ -122,12 +121,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 } else {
                     slide.style.cursor = "zoom-out";
 
-                    const y = e.clientY - rect.top;
+                    const px = (x / rect.width) * 100;
+                    const py = (y / rect.height) * 100;
 
-                    const percentX = x / width * 100;
-                    const percentY = y / rect.height * 100;
-
-                    slide.style.transformOrigin = `${percentX}% ${percentY}%`;
+                    slide.style.transformOrigin = `${px}% ${py}%`;
                 }
 
             });
@@ -138,20 +135,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 const rect = slide.getBoundingClientRect();
                 const x = e.clientX - rect.left;
-                const width = rect.width;
+                const edge = rect.width * 0.25;
 
-                const edgeThreshold = width * 0.25;
-
-                if (x < edgeThreshold || x > width - edgeThreshold) {
+                if (slides.length > 1 && (x < edge || x > rect.width - edge)) {
                     return;
                 }
 
-                if (!isZoomed) {
-                    isZoomed = true;
+                if (!zoomed) {
+                    zoomed = true;
                     slide.classList.add("zoomed");
                     slide.style.transform = "scale(2)";
                 } else {
-                    isZoomed = false;
+                    zoomed = false;
                     slide.classList.remove("zoomed");
                     slide.style.transform = "";
                     slide.style.transformOrigin = "";
@@ -161,28 +156,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
         });
 
-        /* Hover description */
+        /* hover description */
 
         if (sidebarDescription) {
 
             slideshow.addEventListener("mouseenter", () => {
-
                 sidebarDescription.innerHTML =
                     slideshow.dataset.description || "";
-
                 sidebarDescription.style.display = "block";
-
             });
 
             slideshow.addEventListener("mouseleave", () => {
-
                 sidebarDescription.style.display = "none";
-
             });
 
         }
 
-        /* Initialize */
+        /* init */
 
         setActiveSlide(0);
         updateCounter(0);
