@@ -1,23 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
 
     /* ========================= */
-    /* SAFE AUTO-WRAP (RUN FIRST) */
-    /* ========================= */
-
-    document.querySelectorAll("img.slide").forEach(img => {
-
-        const wrapper = document.createElement("div");
-
-        wrapper.className = img.className; // "slide active"
-        img.className = ""; // remove from img
-
-        img.parentNode.insertBefore(wrapper, img);
-        wrapper.appendChild(img);
-
-    });
-
-    /* ========================= */
-    /* IMAGE LOADING OPTIMIZATION */
+    /* IMAGE OPTIMIZATION */
     /* ========================= */
 
     document.querySelectorAll("img").forEach((img, i) => {
@@ -70,10 +54,12 @@ document.addEventListener("DOMContentLoaded", function () {
         function setActiveSlide(i) {
             slides.forEach(s => {
                 s.classList.remove("active", "zoomed");
+                s.style.transform = "";
+                s.style.transformOrigin = "";
+                s.style.cursor = "";
                 s.style.backgroundImage = "";
                 s.style.backgroundSize = "";
                 s.style.backgroundPosition = "";
-                s.style.cursor = "";
             });
 
             slides[i]?.classList.add("active");
@@ -92,6 +78,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 slidesContainer.scrollLeft = index * w;
             }
         }
+
+        /* arrows */
 
         if (left) left.onclick = () => showSlide(index - 1);
         if (right) right.onclick = () => showSlide(index + 1);
@@ -126,94 +114,39 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
         }
-/* ROBUST ZOOM (works with BOTH structures) */
 
-slides.forEach(slide => {
+        /* ========================= */
+        /* ZOOM (clean, stable version) */
+        /* ========================= */
 
-    const img = slide.tagName === "IMG" ? slide : slide.querySelector("img");
-    if (!img) return;
+        slides.forEach(slide => {
 
-    let zoomed = false;
+            let zoomed = false;
 
-    slide.addEventListener("mousemove", (e) => {
+            slide.addEventListener("mousemove", (e) => {
 
-        if (window.innerWidth <= 768) return;
+                if (window.innerWidth <= 768) return;
 
-        const rect = slide.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const edge = rect.width * 0.25;
+                const rect = slide.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
 
-        if (!zoomed) {
-            if (slides.length > 1 && (x < edge || x > rect.width - edge)) {
-                slide.style.cursor = "default";
-            } else {
-                slide.style.cursor = "zoom-in";
-            }
-        } else {
-            slide.style.cursor = "zoom-out";
+                const edge = rect.width * 0.25;
 
-            const y = e.clientY - rect.top;
+                if (!zoomed) {
+                    if (slides.length > 1 && (x < edge || x > rect.width - edge)) {
+                        slide.style.cursor = "default";
+                    } else {
+                        slide.style.cursor = "zoom-in";
+                    }
+                } else {
+                    slide.style.cursor = "zoom-out";
 
-            const percentX = (x / rect.width) * 100;
-            const percentY = (y / rect.height) * 100;
+                    const px = (x / rect.width) * 100;
+                    const py = (y / rect.height) * 100;
 
-            slide.style.backgroundPosition = `${percentX}% ${percentY}%`;
-        }
-
-    });
-
-    slide.addEventListener("click", (e) => {
-
-        if (window.innerWidth <= 768) return;
-
-        const rect = slide.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const edge = rect.width * 0.25;
-
-        if (!zoomed && slides.length > 1 && (x < edge || x > rect.width - edge)) {
-            return;
-        }
-
-        if (!zoomed) {
-
-            zoomed = true;
-            slide.classList.add("zoomed");
-
-            if (left) left.style.pointerEvents = "none";
-            if (right) right.style.pointerEvents = "none";
-
-            const naturalWidth = img.naturalWidth;
-            const naturalHeight = img.naturalHeight;
-
-            slide.style.backgroundImage = `url(${img.src})`;
-            slide.style.backgroundSize = `${naturalWidth}px ${naturalHeight}px`;
-
-            // hide img if wrapped structure
-            if (slide !== img) {
-                img.style.opacity = "0";
-            }
-
-        } else {
-
-            zoomed = false;
-            slide.classList.remove("zoomed");
-
-            if (left) left.style.pointerEvents = "auto";
-            if (right) right.style.pointerEvents = "auto";
-
-            slide.style.backgroundImage = "";
-            slide.style.backgroundSize = "";
-            slide.style.backgroundPosition = "";
-
-            if (slide !== img) {
-                img.style.opacity = "";
-            }
-
-        }
-
-    });
-
-});
+                    slide.style.transformOrigin = `${px}% ${py}%`;
+                }
 
             });
 
@@ -237,11 +170,15 @@ slides.forEach(slide => {
                     if (left) left.style.pointerEvents = "none";
                     if (right) right.style.pointerEvents = "none";
 
-                    const naturalWidth = img.naturalWidth;
-                    const naturalHeight = img.naturalHeight;
+                    const naturalWidth = slide.naturalWidth;
+                    const displayedWidth = slide.getBoundingClientRect().width;
 
-                    slide.style.backgroundImage = `url(${img.src})`;
-                    slide.style.backgroundSize = `${naturalWidth}px ${naturalHeight}px`;
+                    let scale = naturalWidth / displayedWidth;
+
+                    scale = Math.min(scale, 3);
+                    scale = Math.max(scale, 1);
+
+                    slide.style.transform = `scale(${scale})`;
 
                 } else {
 
@@ -251,9 +188,8 @@ slides.forEach(slide => {
                     if (left) left.style.pointerEvents = "auto";
                     if (right) right.style.pointerEvents = "auto";
 
-                    slide.style.backgroundImage = "";
-                    slide.style.backgroundSize = "";
-                    slide.style.backgroundPosition = "";
+                    slide.style.transform = "";
+                    slide.style.transformOrigin = "";
                 }
 
             });
@@ -275,6 +211,8 @@ slides.forEach(slide => {
             });
 
         }
+
+        /* init */
 
         setActiveSlide(0);
         updateCounter(0);
