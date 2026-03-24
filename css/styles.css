@@ -78,6 +78,10 @@ nav {
 .slide.zoomed {
     z-index: 2;
     cursor: zoom-out !important;
+
+    image-rendering: auto;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
 }
 
 /* ========================= */
