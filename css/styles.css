@@ -57,15 +57,27 @@ nav {
 .slides {
     position: relative;
     width: 100%;
+    overflow: hidden; /* important for contained zoom */
 }
 
 .slide {
     width: 100%;
     display: none;
+    transition: transform 0.2s ease;
+    will-change: transform;
 }
 
 .slide.active {
     display: block;
+}
+
+/* ========================= */
+/* Zoom (contained) */
+/* ========================= */
+
+.slide.zoomed {
+    z-index: 3;
+    cursor: zoom-out !important;
 }
 
 /* ========================= */
@@ -112,25 +124,6 @@ nav {
 .slideshow:has(.slides img:only-child) .click-left,
 .slideshow:has(.slides img:only-child) .click-right {
     display: none;
-}
-
-.zoom-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0,0,0,0.9);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-    cursor: zoom-out;
-}
-
-.zoom-overlay img {
-    max-width: 95vw;
-    max-height: 95vh;
 }
 
 /* ========================= */
@@ -210,6 +203,7 @@ nav {
         display: flex;
         flex-direction: row;
         overflow-x: auto;
+        overflow-y: hidden;
         scroll-snap-type: x mandatory;
         -webkit-overflow-scrolling: touch;
         width: 100%;
@@ -222,6 +216,7 @@ nav {
         scroll-snap-align: start;
         width: 100%;
         scroll-snap-stop: always;
+        transform: none !important; /* disable zoom on mobile */
     }
 
     /* counter stays below image */
