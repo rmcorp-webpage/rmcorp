@@ -1,24 +1,23 @@
-/* AUTO-WRAP IMAGES INTO .slide DIVS */
-
-document.querySelectorAll(".slide").forEach(img => {
-
-    // skip if already converted
-    if (img.tagName !== "IMG") return;
-
-    const wrapper = document.createElement("div");
-
-    wrapper.className = img.className; // keeps "slide" + "active"
-    img.className = ""; // remove class from img
-
-    img.parentNode.insertBefore(wrapper, img);
-    wrapper.appendChild(img);
-
-});
-
 document.addEventListener("DOMContentLoaded", function () {
 
     /* ========================= */
-    /* GLOBAL IMAGE OPTIMIZATION */
+    /* SAFE AUTO-WRAP (RUN FIRST) */
+    /* ========================= */
+
+    document.querySelectorAll("img.slide").forEach(img => {
+
+        const wrapper = document.createElement("div");
+
+        wrapper.className = img.className; // "slide active"
+        img.className = ""; // remove from img
+
+        img.parentNode.insertBefore(wrapper, img);
+        wrapper.appendChild(img);
+
+    });
+
+    /* ========================= */
+    /* IMAGE LOADING OPTIMIZATION */
     /* ========================= */
 
     document.querySelectorAll("img").forEach((img, i) => {
@@ -71,8 +70,9 @@ document.addEventListener("DOMContentLoaded", function () {
         function setActiveSlide(i) {
             slides.forEach(s => {
                 s.classList.remove("active", "zoomed");
-                s.style.transform = "";
-                s.style.transformOrigin = "";
+                s.style.backgroundImage = "";
+                s.style.backgroundSize = "";
+                s.style.backgroundPosition = "";
                 s.style.cursor = "";
             });
 
@@ -92,8 +92,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 slidesContainer.scrollLeft = index * w;
             }
         }
-
-        /* arrows */
 
         if (left) left.onclick = () => showSlide(index - 1);
         if (right) right.onclick = () => showSlide(index + 1);
@@ -129,10 +127,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
         }
 
-        /* ZOOM */
+        /* ========================= */
+        /* TRUE SHARP ZOOM */
+        /* ========================= */
 
         slides.forEach(slide => {
 
+            const img = slide.querySelector("img");
             let zoomed = false;
 
             slide.addEventListener("mousemove", (e) => {
@@ -141,8 +142,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 const rect = slide.getBoundingClientRect();
                 const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-
                 const edge = rect.width * 0.25;
 
                 if (!zoomed) {
@@ -154,10 +153,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 } else {
                     slide.style.cursor = "zoom-out";
 
-                    const px = (x / rect.width) * 100;
-                    const py = (y / rect.height) * 100;
+                    const y = e.clientY - rect.top;
 
-                    slide.style.transformOrigin = `${px}% ${py}%`;
+                    const percentX = (x / rect.width) * 100;
+                    const percentY = (y / rect.height) * 100;
+
+                    slide.style.backgroundPosition = `${percentX}% ${percentY}%`;
                 }
 
             });
@@ -182,15 +183,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     if (left) left.style.pointerEvents = "none";
                     if (right) right.style.pointerEvents = "none";
 
-                    const naturalWidth = slide.naturalWidth;
-                    const displayedWidth = slide.getBoundingClientRect().width;
+                    const naturalWidth = img.naturalWidth;
+                    const naturalHeight = img.naturalHeight;
 
-                    let scale = naturalWidth / displayedWidth;
-
-                    scale = Math.min(scale, 3);
-                    scale = Math.max(scale, 1);
-
-                    slide.style.transform = `scale(${scale})`;
+                    slide.style.backgroundImage = `url(${img.src})`;
+                    slide.style.backgroundSize = `${naturalWidth}px ${naturalHeight}px`;
 
                 } else {
 
@@ -200,8 +197,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     if (left) left.style.pointerEvents = "auto";
                     if (right) right.style.pointerEvents = "auto";
 
-                    slide.style.transform = "";
-                    slide.style.transformOrigin = "";
+                    slide.style.backgroundImage = "";
+                    slide.style.backgroundSize = "";
+                    slide.style.backgroundPosition = "";
                 }
 
             });
@@ -223,8 +221,6 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
         }
-
-        /* init */
 
         setActiveSlide(0);
         updateCounter(0);
