@@ -3,7 +3,9 @@ const project = document.querySelector(".project");
 
 if (project) {
     const slideshows = Array.from(project.querySelectorAll(".slideshow"));
-
+if (!window.location.pathname.includes("webstore")) {
+    // shuffle code
+}
     // Fisher-Yates shuffle
     for (let i = slideshows.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
