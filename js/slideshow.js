@@ -1,3 +1,20 @@
+/* AUTO-WRAP IMAGES INTO .slide DIVS */
+
+document.querySelectorAll(".slide").forEach(img => {
+
+    // skip if already converted
+    if (img.tagName !== "IMG") return;
+
+    const wrapper = document.createElement("div");
+
+    wrapper.className = img.className; // keeps "slide" + "active"
+    img.className = ""; // remove class from img
+
+    img.parentNode.insertBefore(wrapper, img);
+    wrapper.appendChild(img);
+
+});
+
 document.addEventListener("DOMContentLoaded", function () {
 
     /* ========================= */
