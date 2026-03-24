@@ -1,5 +1,18 @@
 document.addEventListener("DOMContentLoaded", function () {
+const project = document.querySelector(".project");
 
+if (project) {
+    const slideshows = Array.from(project.querySelectorAll(".slideshow"));
+
+    // Fisher-Yates shuffle
+    for (let i = slideshows.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [slideshows[i], slideshows[j]] = [slideshows[j], slideshows[i]];
+    }
+
+    // re-append in new order
+    slideshows.forEach(slideshow => project.appendChild(slideshow));
+}
     const sidebarDescription =
         document.getElementById("sidebar-description");
 
