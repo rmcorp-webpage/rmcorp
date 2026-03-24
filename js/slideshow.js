@@ -9,13 +9,11 @@ document.addEventListener("DOMContentLoaded", function () {
         if (project) {
             const slideshows = Array.from(project.querySelectorAll(".slideshow"));
 
-            // Fisher-Yates shuffle
             for (let i = slideshows.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [slideshows[i], slideshows[j]] = [slideshows[j], slideshows[i]];
             }
 
-            // re-append in new order
             slideshows.forEach(slideshow => project.appendChild(slideshow));
         }
     }
@@ -99,6 +97,43 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
         }
+
+        /* ZOOM FEATURE */
+
+        slides.forEach(slide => {
+
+            slide.addEventListener("click", (e) => {
+
+                // Desktop: ignore edge clicks (so arrows still work)
+                if (window.innerWidth > 768) {
+
+                    const rect = slide.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const width = rect.width;
+
+                    const edgeThreshold = width * 0.25;
+
+                    if (x < edgeThreshold || x > width - edgeThreshold) {
+                        return;
+                    }
+                }
+
+                const overlay = document.createElement("div");
+                overlay.className = "zoom-overlay";
+
+                const img = document.createElement("img");
+                img.src = slide.src;
+
+                overlay.appendChild(img);
+                document.body.appendChild(overlay);
+
+                overlay.addEventListener("click", () => {
+                    overlay.remove();
+                });
+
+            });
+
+        });
 
         /* Hover description */
 
