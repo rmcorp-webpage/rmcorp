@@ -57,7 +57,7 @@ nav {
 .slides {
     position: relative;
     width: 100%;
-    overflow: hidden; /* contains zoom */
+    overflow: hidden;
 }
 
 .slide {
@@ -65,10 +65,17 @@ nav {
     display: none;
     position: relative;
     overflow: hidden;
+
     transform-origin: center;
     transition: transform 0.2s ease;
     will-change: transform;
+
     background-color: transparent;
+
+    /* rendering quality fixes */
+    image-rendering: auto;
+    backface-visibility: hidden;
+    transform: translateZ(0);
 }
 
 .slide.active {
@@ -78,10 +85,6 @@ nav {
 .slide.zoomed {
     z-index: 2;
     cursor: zoom-out !important;
-
-    image-rendering: auto;
-    image-rendering: crisp-edges;
-    image-rendering: pixelated;
 }
 
 /* ========================= */
@@ -199,7 +202,8 @@ nav {
         display: block;
         flex: 0 0 100%;
         scroll-snap-align: start;
-        transform: none !important; /* disable zoom */
+
+        transform: none !important; /* disables zoom on mobile */
     }
 
     .click-left,
