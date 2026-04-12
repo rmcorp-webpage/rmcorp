@@ -193,6 +193,7 @@ nav {
         overflow-x: auto;
         overflow-y: hidden;
         scroll-snap-type: x mandatory;
+        width: 100%;
     }
 
     .slide {
