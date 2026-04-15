@@ -65,13 +65,7 @@ nav {
     display: none;
     position: relative;
     overflow: hidden;
-
-    transform-origin: center;
-    transition: transform 0.2s ease;
-    will-change: transform;
-
     background-color: transparent;
-
     backface-visibility: hidden;
 }
 
