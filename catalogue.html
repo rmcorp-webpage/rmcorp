@@ -8,7 +8,87 @@ if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; }
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>R&M Corp</title>
 <style>
-.sidebar{position:fixed;left:0;top:0;width:200px;height:100vh;padding:10px}.logo{margin-bottom:5px}.logo svg{width:100px;height:auto;display:block}nav{margin-top:0}.content{margin-left:200px;margin-top:25px;padding:10px}.catalogue-wrap{width:1000px;max-width:100%}.catalogue-search{width:100%;margin-bottom:12px;font-family:Times New Roman,serif}.catalogue-table{width:100%;border-collapse:collapse;font-family:Times New Roman,serif}.catalogue-table th,.catalogue-table td{padding:4px 8px;text-align:left;vertical-align:top;font-weight:normal}.project{margin-bottom:80px}@media (max-width:800px){.sidebar{position:relative;width:auto;height:auto}.content{margin-left:0;margin-top:0;max-width:100%}.catalogue-wrap{width:100%}}
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    width:200px;
+    height:100vh;
+    padding:10px;
+}
+
+.logo{
+    margin-bottom:5px;
+}
+
+.logo svg{
+    width:100px;
+    height:auto;
+    display:block;
+}
+
+nav{
+    margin-top:0;
+}
+
+.content{
+    margin-left:200px;
+    margin-top:25px;
+    padding:10px;
+}
+
+.project{
+    margin-bottom:80px;
+}
+
+.catalogue-wrap{
+    width:1000px;
+    max-width:100%;
+}
+
+.catalogue-search{
+    width:100%;
+    margin-bottom:12px;
+    font-family:Times New Roman, serif;
+}
+
+.catalogue-table{
+    width:100%;
+    border-collapse:collapse;
+    table-layout:fixed;
+    font-family:Times New Roman, serif;
+}
+
+.catalogue-table thead tr{
+    border-bottom:1px solid #000;
+}
+
+.catalogue-table th,
+.catalogue-table td{
+    padding:4px 8px;
+    text-align:left;
+    vertical-align:top;
+    font-weight:normal;
+}
+
+@media (max-width:800px){
+
+    .sidebar{
+        position:relative;
+        width:auto;
+        height:auto;
+    }
+
+    .content{
+        margin-left:0;
+        margin-top:0;
+        max-width:100%;
+    }
+
+    .catalogue-wrap{
+        width:100%;
+    }
+}
 </style>
 </head>
 <body>
@@ -30,13 +110,77 @@ Catalogue<br>
 <a href="contact.html">Contact</a>
 </nav>
 </div>
-<div class="content"><div class="project"><div class="catalogue-wrap">
-<input id="search" class="catalogue-search" placeholder="Search catalogue">
-<table class="catalogue-table"><thead><tr><th>Catalogue No.</th><th>Object</th><th>Notes</th><th>Material</th><th>Dimensions</th><th>Edition</th><th>Date</th></tr></thead><tbody id="rows"></tbody></table>
-</div></div></div>
+<div class="content">
+        <div class="project">
+                <div class="catalogue-wrap">
+                        <input id="search" class="catalogue-search" placeholder="Search catalogue">
+<table class="catalogue-table">
+  <colgroup>
+    <col style="width:12.5%">
+    <col style="width:25%">
+    <col style="width:12.5%">
+    <col style="width:12.5%">
+    <col style="width:12.5%">
+    <col style="width:12.5%">
+    <col style="width:12.5%">
+  </colgroup>
+
+  <thead>
+    <tr>
+      <th>Catalogue No.</th>
+      <th>Object</th>
+      <th>Notes</th>
+      <th>Material</th>
+      <th>Dimensions</th>
+      <th>Edition</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+
+  <tbody id="rows"></tbody>
+</table>                </div>
+        </div>
+</div>
 <script>
-const items=[{id:'RM0001',title:'R&M Corp. vectored logo',notes:'',material:'Digital vector',dimensions:'',edition:'1',date:'2/22/2022'},{id:'RM0002',title:'R&M Coke can',notes:'',material:'Aluminum',dimensions:'4.83 x 2.6 in',edition:'1',date:'2/24/2022'},{id:'RM0019',title:'Photocopier stress reliever',notes:'',material:'Polyurethane foam',dimensions:'2.25 x 3.25 x 1.75 in',edition:'50',date:'4/9/2026'},{id:'RM0020',title:'Thank You note with stress reliever',notes:'',material:'Paper',dimensions:'8.5 x 11 in open',edition:'',date:'4/15/2026'}];
-const rows=document.getElementById('rows');function render(list){rows.innerHTML='';list.forEach(i=>rows.innerHTML+=`<tr><td>${i.id}</td><td>${i.title}</td><td>${i.notes}</td><td>${i.material}</td><td>${i.dimensions}</td><td>${i.edition}</td><td>${i.date}</td></tr>`)}render(items);document.getElementById('search').addEventListener('input',e=>{const q=e.target.value.toLowerCase();render(items.filter(i=>Object.values(i).join(' ').toLowerCase().includes(q)))})
+const items = [
+  {id:'RM0001',title:'R&M Corp. vectored logo',notes:'',material:'Digital vector',dimensions:'',edition:'1',date:'2/22/2022'},
+  {id:'RM0002',title:'R&M Coke can',notes:'',material:'Aluminum',dimensions:'4.83 x 2.6 in',edition:'1',date:'2/24/2022'},
+  {id:'RM0019',title:'Photocopier stress reliever',notes:'',material:'Polyurethane foam',dimensions:'2.25 x 3.25 x 1.75 in',edition:'50',date:'4/9/2026'},
+  {id:'RM0020',title:'Thank You note with stress reliever',notes:'',material:'Paper',dimensions:'8.5 x 11 in open',edition:'',date:'4/15/2026'}
+];
+
+const rows = document.getElementById('rows');
+const search = document.getElementById('search');
+
+function render(list) {
+  rows.innerHTML = '';
+
+  list.forEach(i => {
+    rows.innerHTML += `
+      <tr>
+        <td style="width:12.5%">${i.id}</td>
+        <td style="width:25%">${i.title}</td>
+        <td style="width:12.5%">${i.notes}</td>
+        <td style="width:12.5%">${i.material}</td>
+        <td style="width:12.5%">${i.dimensions}</td>
+        <td style="width:12.5%">${i.edition}</td>
+        <td style="width:12.5%">${i.date}</td>
+      </tr>
+    `;
+  });
+}
+
+render(items);
+
+search.addEventListener('input', e => {
+  const q = e.target.value.toLowerCase();
+
+  const filtered = items.filter(i =>
+    Object.values(i).join(' ').toLowerCase().includes(q)
+  );
+
+  render(filtered);
+});
 </script>
 </body>
 </html>
