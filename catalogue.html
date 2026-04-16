@@ -44,19 +44,41 @@ nav{
 .catalogue-wrap{
     width:1000px;
     max-width:100%;
+    font-family:Helvetica, Arial, sans-serif;
+    font-size:10px;
+}
+
+.catalogue-top{
+    display:grid;
+    grid-template-columns:12.5% 25% 12.5% 12.5% 12.5% 12.5% 12.5%;
+    align-items:end;
+    margin-bottom:6px;
 }
 
 .catalogue-search{
+    grid-column:1 / span 5;
     width:100%;
-    margin-bottom:12px;
-    font-family:Times New Roman, serif;
+    box-sizing:border-box;
+    font-family:Helvetica, Arial, sans-serif;
+    font-size:10px;
+}
+
+.updated-label{
+    grid-column:6;
+    padding-left:8px;
+}
+
+.updated-date{
+    grid-column:7;
+    padding-left:8px;
 }
 
 .catalogue-table{
     width:100%;
     border-collapse:collapse;
     table-layout:fixed;
-    font-family:Times New Roman, serif;
+    font-family:Helvetica, Arial, sans-serif;
+    font-size:10px;
 }
 
 .catalogue-table thead tr{
@@ -87,6 +109,18 @@ nav{
 
     .catalogue-wrap{
         width:100%;
+    }
+
+    .catalogue-top{
+        grid-template-columns:1fr;
+        gap:6px;
+    }
+
+    .catalogue-search,
+    .updated-label,
+    .updated-date{
+        grid-column:auto;
+        padding-left:0;
     }
 }
 </style>
