@@ -104,23 +104,40 @@ nav{
     .content{
         margin-left:0;
         margin-top:0;
+        padding:10px;
         max-width:100%;
+        overflow-x:hidden;
     }
 
     .catalogue-wrap{
         width:100%;
+        overflow-x:auto;
+        -webkit-overflow-scrolling:touch;
     }
 
     .catalogue-top{
-        grid-template-columns:1fr;
-        gap:6px;
+        display:grid;
+        grid-template-columns:220px auto auto;
+        min-width:900px;
+        gap:8px;
+        margin-bottom:6px;
     }
 
-    .catalogue-search,
-    .updated-label,
+    .catalogue-search{
+        grid-column:1;
+        width:220px;
+    }
+
+    .updated-label{
+        grid-column:2;
+    }
+
     .updated-date{
-        grid-column:auto;
-        padding-left:0;
+        grid-column:3;
+    }
+
+    .catalogue-table{
+        min-width:900px;
     }
 }
 </style>
