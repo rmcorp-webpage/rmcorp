@@ -167,7 +167,26 @@ document.addEventListener("DOMContentLoaded", () => {
   shuffleProjectSlideshows();
 
   const sidebarDescription = document.getElementById("sidebar-description");
+
+document.querySelectorAll(".slideshow").forEach((slideshow) => {
+  initSlideshow(slideshow, sidebarDescription);
+});
+
+window.addEventListener("load", () => {
+  document.querySelectorAll(".slideshow .slides").forEach((slides) => {
+    slides.scrollLeft = 0;
+  });
+
   document.querySelectorAll(".slideshow").forEach((slideshow) => {
-    initSlideshow(slideshow, sidebarDescription);
+    const first = slideshow.querySelector(".slide");
+    const all = slideshow.querySelectorAll(".slide");
+
+    all.forEach((slide) => slide.classList.remove("active"));
+    if (first) first.classList.add("active");
+
+    const counter = slideshow.querySelector(".slide-counter");
+    if (counter) {
+      counter.textContent = `1 / ${all.length}`;
+    }
   });
 });
